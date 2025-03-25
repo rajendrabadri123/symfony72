@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: ${APP_ENV:-dev}
+    container_name: symfony_app
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    environment:
+      - APP_ENV=${APP_ENV:-dev}
+      - APP_SECRET=${APP_SECRET:-ChangeThisSecret}
+      - DATABASE_URL=${DATABASE_URL:-}
+    ports:
+      - "${APP_PORT:-8000}:80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Uncomment if you need Redis
+  # redis:
+  #   image: redis:alpine
+  #   ports:
+  #     - "6379:6379"
+
+  # Uncomment if you need MySQL
+  # db:
+  #   image: mysql:8.0
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+  #     MYSQL_DATABASE: ${DB_NAME:-symfony}
+  #     MYSQL_USER: ${DB_USER:-symfony}
+  #     MYSQL_PASSWORD: ${DB_PASSWORD:-symfony}
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+
+volumes:
+  # mysql_data:
