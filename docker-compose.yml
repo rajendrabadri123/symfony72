@@ -41,5 +41,5 @@ services:
   #   volumes:
   #     - mysql_data:/var/lib/mysql
 
-volumes:
+#volumes:
   # mysql_data:
